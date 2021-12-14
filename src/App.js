@@ -13,10 +13,10 @@ function App() {
   const contentType = 'image/jpeg';
 
   const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
-    console.log('b64Data ', b64Data.substr(27, b64Data.length ) );
-    const byteCharacters = window.atob(b64Data.substr(27, b64Data.length ));
+     b64Data = b64Data.split(',')[1]
+    console.log('b64Data ', b64Data );
+    const byteCharacters = window.atob( b64Data );
     const byteArrays = [];
-    console.log('blob ', byteCharacters );
     
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
       const slice = byteCharacters.slice(offset, offset + sliceSize);
@@ -25,12 +25,13 @@ function App() {
       for (let i = 0; i < slice.length; i++) {
         byteNumbers[i] = slice.charCodeAt(i);
       }
-  
+      
       const byteArray = new Uint8Array(byteNumbers);
       byteArrays.push(byteArray);
     }
-  
+    
     const blob = new Blob(byteArrays, {type: contentType});
+    console.log('blob ', blob );
     return blob;
   }
 
@@ -45,9 +46,15 @@ function App() {
 
       console.log('blob ', blobUrl );
 
-      var image = new Image();
-      image.src = imageSrc;
-      document.body.appendChild(image);
+      let file = new File([blobUrl], "demo");
+
+      console.log('file ', file );
+
+      // fetch(imageSrc).then(res => console.log( 'res ', res.blob() ) )
+
+      // var image = new Image();
+      // image.src = imageSrc;
+      // document.body.appendChild(image);
 
       // console.log('url ', image.src );
 
